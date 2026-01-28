@@ -1,15 +1,30 @@
 use std::io; // importing libraries, this one being input output in standard library
+use rand::Rng;
+use std::cmp::Ordering;
 
 fn main() {
     println!("Guess the number!");
 
-    println!("Please input your guess.");
+    let secret_num = rand::thread_rng().gen_range(1..=10);
 
-    let mut guess = String::new(); // var
+    loop {
+        println!("Please input your guess.");
 
-    io::stdin() // user input. reads in val and error handles the result
-        .read_line(&mut guess)
-        .expect("Failed to read line");
-    
-    println!("You guessed: {guess}");
+        let mut guess = String::new(); // var
+
+        io::stdin() // user input. reads in val and error handles the result
+            .read_line(&mut guess)
+            .expect("Failed to read line");
+
+        let guess: u32 = guess.trim().parse().expect("Please type a number!");
+        
+        match guess.cmp(&secret_num) {
+            Ordering::Less => println!("Too small :/"),
+            Ordering::Greater => println!("Too big :/"),
+            Ordering::Equal => {
+                println!("Awesome");
+                break;
+            }
+        }
+    }
 }
